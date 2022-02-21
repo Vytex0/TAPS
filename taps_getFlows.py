@@ -8,7 +8,7 @@ import sys
 #https://appdividend.com/2022/01/28/how-to-convert-python-list-to-json/
 
 FLOW_MAX_DURATION_SECONDS = 60 # in seconds
-NB_PACKETS = 4479658
+NB_PACKETS = ((4479658/389)*1024)*0.389
 
 flowsList = []
 currentFlowsList = []
