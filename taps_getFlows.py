@@ -23,7 +23,7 @@ def convertSecondsToPrintableTime(seconds):
         return str(int(seconds))+"s"
     if(seconds < 3600):
         return str(int(seconds//60))+"m "+str(int(seconds%60))+"s"
-    return str(int(seconds//3600))+"h "+str(int((seconds%3600)%60))+"m "+str(int(seconds%60))+"s"
+    return str(int(seconds//3600))+"h "+str(int((seconds%3600)//60))+"m "+str(int(seconds%60))+"s"
 
 def getPacketTime(packet):
     return float(packet.time)
