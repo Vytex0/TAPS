@@ -1,9 +1,9 @@
 import json
 import matplotlib.pyplot as plt
 from numpy import real
+import sys
+import os
 
-SORTED_FLOWS_FILENAME = "sortedFlows.json"
-REAL_ATTACKERS_FILENAME = "realAttackers.json"
 
 TAPS_TIMER_SECONDS = 10
 TAPS_η1 = 99
@@ -11,6 +11,24 @@ TAPS_η0 = 0.01
 TAPS_θ0 = 0.8
 TAPS_θ1 = 0.2
 TAPS_k = 3
+
+########################
+# Main code
+if(len(sys.argv) < 4):
+    print("Commande usage : ./taps_getRealAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>")
+    sys.exit()
+SORTED_FLOWS_FILENAME = sys.argv[1]
+REAL_ATTACKERS_FILENAME = sys.argv[2]
+OUTPUT_RESULTS_FILENAME = sys.argv[3]
+if(not(os.path.isfile(SORTED_FLOWS_FILENAME))):
+    print("ERROR: Captures file doesn't exist.")
+    sys.exit()
+if(not(os.path.isfile(REAL_ATTACKERS_FILENAME))):
+    print("ERROR: Attackers list file doesn't exist.")
+    sys.exit()
+if(os.path.isfile(OUTPUT_RESULTS_FILENAME)):
+    print("ERROR: Please remove already existing output results file.")
+    sys.exit()
 
 
 
@@ -70,10 +88,6 @@ def updateSrcRatio(src):
 
     ipToPort = nbIps / nbPorts
     portToIp = nbPorts / nbIps
-
-    if(src == "147.32.84.165"):
-        print("ipToPort=",ipToPort)
-        print("portToIp=",portToIp)
 
     if(ipToPort > TAPS_k or portToIp > TAPS_k):
         deltaY = setDeltaYValue(deltaY, src, getDeltaYValue(deltaY, src) * ((1-TAPS_θ1)/(1-TAPS_θ0)))
@@ -199,4 +213,28 @@ print("----------")
 print("test statistics")
 print("  Success ratio =", (nbTrueScannersDetected/nbTrueScanners))
 print("  False positive ratio =", (nbFalseScannersDetected/nbTrueScanners))
-print("  False positive ratio =", (nbTrueScannersMissed/nbTrueScanners))
+print("  False negative ratio =", (nbTrueScannersMissed/nbTrueScanners))
+
+print("----------")
+print("registering results :")
+results = {}
+results["lenFlows"] = len(flows)
+results["lenScan"] = len(scan)
+results["lenDeltaY"] = len(deltaY)
+results["timerCount"] = timerCount
+results["nbRealAttackers"] = nbRealAttackers
+results["nbTrueScanners"] = (nbTrueScanners)
+results["nbTrueScannersDetected"] = (nbTrueScannersDetected)
+results["nbFalseScannersDetected"] = (nbFalseScannersDetected)
+results["nbTrueScannersMissed"] = (nbTrueScannersMissed)
+results["successRatio"] = (nbTrueScannersDetected/nbTrueScanners)
+results["falsePositiveRatio"] = (nbFalseScannersDetected/nbTrueScanners)
+results["falseNegativeRatio"] = (nbTrueScannersMissed/nbTrueScanners)
+try:   
+    os.remove(OUTPUT_RESULTS_FILENAME)
+except:
+    pass
+f = open(OUTPUT_RESULTS_FILENAME, "w")
+f.write(json.dumps(results))
+f.close()
+print("Results registered")

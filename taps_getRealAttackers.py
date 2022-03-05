@@ -2,9 +2,7 @@ import json
 from numpy import real_if_close
 from scapy.all import *
 import os
-
-REAL_ATTACKERS_FILENAME = "realAttackers.json"
-ATTACKERS_PCAP_FILENAME = "data/botnet-46/botnet-capture-20110815-fast-flux.pcap"
+import sys
 
 realAttackers = {}
 
@@ -15,6 +13,20 @@ def extractAttacker(packet):
         realAttackers[src] = realAttackers.get(src, 0)+1
     except:
         return None
+
+########################
+# Main code
+if(len(sys.argv) < 3):
+    print("Commande usage : ./taps_getRealAttackers.py <input pcap attackers captures.pcap> <output attackers.json>")
+    sys.exit()
+ATTACKERS_PCAP_FILENAME = sys.argv[1]
+REAL_ATTACKERS_FILENAME = sys.argv[2]
+if(not(os.path.isfile(ATTACKERS_PCAP_FILENAME))):
+    print("ERROR: Captures file doesn't exist.")
+    sys.exit()
+if(os.path.isfile(REAL_ATTACKERS_FILENAME)):
+    print("ERROR: Please remove already existing attackers list file.")
+    sys.exit()
 
 sniff(offline=ATTACKERS_PCAP_FILENAME,prn=extractAttacker,store=0)
 
