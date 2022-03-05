@@ -9,7 +9,7 @@ Le projet est décomposé en quatre fichiers :
   
   
 ## taps_getFlows.py  
-**Utilisation :** ./taps_getFlows.py <input pcap captures.pcap> <output sorted flows.json>  
+**Utilisation :** `./taps_getFlows.py <input pcap captures.pcap> <output sorted flows.json>`  
   
 **Type :** Ce script est un **script de préparation**. Une fois le fichier de sortie généré, il n'est plus nécessaire de le lancer à nouveau.  
   
@@ -24,7 +24,7 @@ Le projet est décomposé en quatre fichiers :
 
 
 ## taps_getRealAttackers.py  
-**Utilisation :** ./taps_getRealAttackers.py <input pcap attackers captures.pcap> <output attackers.json>
+**Utilisation :** `./taps_getRealAttackers.py <input pcap attackers captures.pcap> <output attackers.json>`
   
 **Type :** Ce script est un **script de préparation**. Une fois le fichier de sortie généré, il n'est plus nécessaire de le lancer à nouveau.  
   
@@ -35,7 +35,7 @@ Le projet est décomposé en quatre fichiers :
 
   
 ## taps_calculateAttackers.py
-**Utilisation :** ./taps_calculateAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>
+**Utilisation :** `./taps_calculateAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>`
   
 **Type :** Ce script est le **script principal**. Il éxecute l'algorithme de TAPS sur les flux précedemment calculés.
   
@@ -54,7 +54,7 @@ Le projet est décomposé en quatre fichiers :
 
   
 ## taps_getStats.py
-**Utilisation :** ./taps_getStats.py <sorted flows file.json> <attackers list file.json>
+**Utilisation :** `./taps_getStats.py <sorted flows file.json> <attackers list file.json>`
   
 **Type :** Ce script est un **script annexe**. 
   
