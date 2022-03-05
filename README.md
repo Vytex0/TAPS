@@ -19,6 +19,12 @@ Le projet est décomposé en quatre fichiers :
 - NB_PACKETS : nombre de paquets dans la capture
   
 **Description :** Ce script permet de récupérer tous les flux dans la capture donnée en paramètre. Les flux sont ensuite enregistrés dans un fichier JSON lisible pour les prochains scripts. Les flux déjà générés sont disponible ici : [Liste des flux calculés](https://drive.google.com/drive/folders/1vmYRL6OQ7jASi36vmv6TPWcxhOG6INXS?usp=sharing) (..-tbXX correspond à FLOW_MAX_DURATION_SECONDS = XX)
+
+
+## Exemples de fichiers de sortie
+
+Vous trouverez ici un exemple de fichiers de sortie des différents scripts :
+https://drive.google.com/drive/folders/1q6iQ3MiYHOZpkkgeMAhHv_RhRD1Zq14z?usp=sharing
   
 
 
