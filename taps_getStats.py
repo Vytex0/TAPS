@@ -5,7 +5,7 @@ import os
 ########################
 # Main code
 if(len(sys.argv) < 3):
-    print("Commande usage : ./taps_getRealAttackers.py <sorted flows file.json> <attackers list file.json>")
+    print("Commande usage : ./taps_getStats.py <sorted flows file.json> <attackers list file.json>")
     sys.exit()
 SORTED_FLOWS_FILENAME = sys.argv[1]
 REAL_ATTACKERS_FILENAME = sys.argv[2]

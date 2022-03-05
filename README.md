@@ -2,10 +2,10 @@
 # Implémentation de TAPS  
   
 Le projet est décomposé en quatre fichiers :  
-- [taps_getFlows.py]([https://github.com/Vytex0/TAPS/blob/main/taps_getFlows.py](https://github.com/Vytex0/TAPS/blob/main/taps_getFlows.py) "taps_getFlows.py")  
-- [taps_getRealAttackers.py]([https://github.com/Vytex0/TAPS/blob/main/taps_getRealAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_getRealAttackers.py)"taps_getRealAttackers.py")  
-- [taps_calculateAttackers.py]([https://github.com/Vytex0/TAPS/blob/main/taps_calculateAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_calculateAttackers.py)"taps_calculateAttackers.py")  
-- [taps_getStats.py]([https://github.com/Vytex0/TAPS/blob/main/taps_getStats.py](https://github.com/Vytex0/TAPS/blob/main/taps_getStats.py) "taps_getStats.py")  
+- [taps_getFlows.py](https://github.com/Vytex0/TAPS/blob/main/taps_getFlows.py)
+- [taps_getRealAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_getRealAttackers.py)  
+- [taps_calculateAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_calculateAttackers.py)  
+- [taps_getStats.py](https://github.com/Vytex0/TAPS/blob/main/taps_getStats.py)  
   
   
 ## taps_getFlows.py  
@@ -51,7 +51,7 @@ Le projet est décomposé en quatre fichiers :
 
   
 ## taps_getStats.py
-**Utilisation :** ./taps_getRealAttackers.py <sorted flows file.json> <attackers list file.json>
+**Utilisation :** ./taps_getStats.py <sorted flows file.json> <attackers list file.json>
   
 **Type :** Ce script est le **script annexe**. 
   
