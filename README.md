@@ -20,6 +20,9 @@ Le projet est décomposé en quatre fichiers :
   
 **Description :** Ce script permet de récupérer tous les flux dans la capture donnée en paramètre. Les flux sont ensuite enregistrés dans un fichier JSON lisible pour les prochains scripts. Les flux déjà générés sont disponible ici : [Liste des flux calculés](https://drive.google.com/drive/folders/1vmYRL6OQ7jASi36vmv6TPWcxhOG6INXS?usp=sharing) (..-tbXX correspond à FLOW_MAX_DURATION_SECONDS = XX)
   
+
+
+
 ## taps_getRealAttackers.py  
 **Utilisation :** ./taps_getRealAttackers.py <input pcap attackers captures.pcap> <output attackers.json>
   
@@ -32,7 +35,7 @@ Le projet est décomposé en quatre fichiers :
 
   
 ## taps_calculateAttackers.py
-**Utilisation :** ./taps_getRealAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>
+**Utilisation :** ./taps_calculateAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>
   
 **Type :** Ce script est le **script principal**. Il éxecute l'algorithme de TAPS sur les flux précedemment calculés.
   
@@ -53,7 +56,7 @@ Le projet est décomposé en quatre fichiers :
 ## taps_getStats.py
 **Utilisation :** ./taps_getStats.py <sorted flows file.json> <attackers list file.json>
   
-**Type :** Ce script est le **script annexe**. 
+**Type :** Ce script est un **script annexe**. 
   
 **Variables à configurer :** Aucune
   
