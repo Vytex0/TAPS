@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from numpy import real
 import sys
 import os
+import time
 
 
-TAPS_TIMER_SECONDS = 10
+TAPS_TIMER_SECONDS = 150
 TAPS_η1 = 99
 TAPS_η0 = 0.01
 TAPS_θ0 = 0.8
@@ -14,12 +15,15 @@ TAPS_k = 3
 
 ########################
 # Main code
-if(len(sys.argv) < 4):
-    print("Commande usage : ./taps_calculateAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json>")
+if(len(sys.argv) < 7):
+    print("Commande usage : ./taps_calculateAttackers.py <sorted flows file.json> <attackers list file.json> <output results.json> <output argus flows.json> <timer_seconds> <k_value>")
     sys.exit()
 SORTED_FLOWS_FILENAME = sys.argv[1]
 REAL_ATTACKERS_FILENAME = sys.argv[2]
 OUTPUT_RESULTS_FILENAME = sys.argv[3]
+OUTPUT_ARGUS_FILENAME = sys.argv[4]
+ARG_TIMER = sys.argv[3]
+ARG_K = sys.argv[4]
 if(not(os.path.isfile(SORTED_FLOWS_FILENAME))):
     print("ERROR: Captures file doesn't exist.")
     sys.exit()
@@ -29,7 +33,13 @@ if(not(os.path.isfile(REAL_ATTACKERS_FILENAME))):
 if(os.path.isfile(OUTPUT_RESULTS_FILENAME)):
     print("ERROR: Please remove already existing output results file.")
     sys.exit()
+if(os.path.isfile(OUTPUT_ARGUS_FILENAME)):
+    print("ERROR: Please remove already existing output argus file.")
+    sys.exit()
 
+
+TAPS_TIMER_SECONDS = int(ARG_TIMER)
+TAPS_k = int(ARG_K)
 
 
 sortedFlowsFile = open(SORTED_FLOWS_FILENAME, "r")
@@ -47,6 +57,20 @@ S = []
 scan = {}
 
 deltaY = {}
+
+argusFile = open(OUTPUT_ARGUS_FILENAME, "a")
+argusFile.write("#stime,dur, runtime, proto, saddr, sport, dir, daddr, dport, state, sjit, djit, stos, dtos, pkts, bytes, trans, mean, stddev, rate, sintpkt, sintdist, sintpktact, sintdistact, sintpktidl, sintdistidl, dintpkt, dintdist, dintpktact, dintdistact, dintpktidl, dintdistidl, Taps(Normal:CC:Background), Taps(Normal:CC:Background)\n")
+
+def generateArgusLine(epochStartTime, epochEndTime, proto, sourceAddr, sourcePort, destAddr, destPort, nbPkts, tapsResult):
+    #stime	dur	 runtime	 proto	 saddr	 sport	 dir	 daddr	 dport	 state	 sjit	 djit	 stos	 dtos	 pkts	 bytes	 trans	 mean	 stddev	 rate	 sintpkt	 sintdist	 sintpktact	 sintdistact	 sintpktidl	 sintdistidl	 dintpkt	 dintdist	 dintpktact	 dintdistact	 dintpktidl	 dintdistidl	 Label(Normal:CC:Background) 	Bclus(Normal:CC:Unknown)
+    stime, duration, runtime, protocol = time.strftime('%Y/%m/%d %H:%M:%S.0', time.localtime(epochStartTime)), epochEndTime-epochStartTime, epochEndTime-epochStartTime, proto
+    saddr, sport, direction, daddr, dport, state = sourceAddr, sourcePort, "->", destAddr, destPort, ""
+    sjit, djit, stos, dtos  = "", "", "", ""
+    pkts, bytess, trans, mean = nbPkts, "", "", epochEndTime-epochStartTime
+    stddev, rate, sintpkt, sintdist, sintpktact, sintdistact, sintpktidl, sintdistidl = "", "", "", "", "", "", "", ""
+    dintpkt, dintdist, dintpktact, dintdistact, dintpktidl, dintdistidl = "", "", "", "", "", ""
+    tapsValue = tapsResult
+    return f"{stime},{duration},{runtime},{protocol},{saddr},{sport},{direction},{daddr},{dport},{state},{sjit},{djit},{stos},{dtos},{pkts},{bytess},{trans},{mean},{stddev},{rate},{sintpkt},{sintdist},{sintpktact},{sintdistact},{sintpktidl},{sintdistidl},{dintpkt},{dintdist},{dintpktact},{dintdistact},{dintpktidl},{dintdistidl},{tapsValue},{tapsValue}"
 
 def getNbIpsBySrc(src):
     sum = 0
@@ -140,6 +164,7 @@ totalFlowNb = len(flows)
 for flow in flows:
     flowCount+= 1
     if((flow["endTime"]-startTimerTime) > TAPS_TIMER_SECONDS):
+        print("part B")
         partB()
         timerCount += 1
         startTimerTime = flow["endTime"]
@@ -161,6 +186,24 @@ for flow in flows:
 
     if(flowCount %1000 == 0):
         print(flowCount, "/", totalFlowNb)
+
+    # register to argus file
+    tapsResult = "Unknown"
+    if(src in scan):
+        tapsResult = "From-Botnet"
+    elif(not(src in S)):
+        tapsResult = "Normal"
+    argusFile.write(generateArgusLine(flow["startTime"], flow["endTime"], proto, src, srcPort, dst, dstPort, 1, tapsResult)+"\n")
+
+    if(totalFlowNb == flowCount):
+        print("final part B")
+        partB()
+        timerCount += 1
+        startTimerTime = flow["endTime"]
+
+
+
+
 
 nbTrueScannersDetected = 0
 nbTrueScanners = 0
@@ -192,8 +235,8 @@ for attacker in realAttackers:
             nbTrueScannersMissed += 1
         nbRealAttackers +=1
         print(attacker, "has", realAttackers[attacker],"packets")
-        plt.plot(deltaY[attacker], label=attacker)
-        plt.show()
+        #plt.plot(deltaY[attacker], label=attacker)
+        #plt.show()
 print("nbRealAttackers =",nbRealAttackers)
 
 print("----------")
@@ -238,3 +281,5 @@ f = open(OUTPUT_RESULTS_FILENAME, "w")
 f.write(json.dumps(results))
 f.close()
 print("Results registered")
+
+argusFile.close()
