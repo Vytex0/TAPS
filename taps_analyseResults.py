@@ -10,7 +10,7 @@ if(len(sys.argv) < 2):
 RESULT_FILES_DIRECTORY = sys.argv[1]
 
 
-def displayNBestsInDictionnary(dictionnary, N):
+def displayNFirstInDictionnary(dictionnary, N):
     i = 0
     for e in dictionnary:
         if(i < N):
@@ -31,11 +31,20 @@ for resultFileName in resultFileNames:
     successRatios[resultFileName] = results["successRatio"]
     falsePositiveRatios[resultFileName] = results["falsePositiveRatio"]
 
-successRatios = {k: v for k, v in sorted(successRatios.items(), key=lambda item: item[1], reverse=True)}
-falsePositiveRatios = {k: v for k, v in sorted(falsePositiveRatios.items(), key=lambda item: item[1], reverse=True)}
+bestSuccessRatios = {k: v for k, v in sorted(successRatios.items(), key=lambda item: item[1], reverse=True)}
+bestFalsePositiveRatios = {k: v for k, v in sorted(falsePositiveRatios.items(), key=lambda item: item[1], reverse=True)}
+worstSuccessRatios = {k: v for k, v in sorted(successRatios.items(), key=lambda item: item[1], reverse=False)}
+worstFalsePositiveRatios = {k: v for k, v in sorted(falsePositiveRatios.items(), key=lambda item: item[1], reverse=False)}
 
 print("Best successRatios:")
-displayNBestsInDictionnary(successRatios, 5)
+displayNFirstInDictionnary(bestSuccessRatios, 10)
+print("--- --- --- --- --- ---")
+print("Worst successRatios:")
+displayNFirstInDictionnary(worstSuccessRatios, 10)
+print("--- --- --- --- --- ---")
 print("--- --- --- --- --- ---")
 print("Best falsePositiveRatios:")
-displayNBestsInDictionnary(falsePositiveRatios, 5)
+displayNFirstInDictionnary(bestFalsePositiveRatios, 10)
+print("--- --- --- --- --- ---")
+print("Worst falsePositiveRatios:")
+displayNFirstInDictionnary(worstFalsePositiveRatios, 10)
