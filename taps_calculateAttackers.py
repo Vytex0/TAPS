@@ -59,9 +59,9 @@ scan = {}
 deltaY = {}
 
 argusFile = open(OUTPUT_ARGUS_FILENAME, "a")
-argusFile.write("#stime,dur, runtime, proto, saddr, sport, dir, daddr, dport, state, sjit, djit, stos, dtos, pkts, bytes, trans, mean, stddev, rate, sintpkt, sintdist, sintpktact, sintdistact, sintpktidl, sintdistidl, dintpkt, dintdist, dintpktact, dintdistact, dintpktidl, dintdistidl, Taps(Normal:CC:Background), Taps(Normal:CC:Background)\n")
+argusFile.write("#stime,dur, runtime, proto, saddr, sport, dir, daddr, dport, state, sjit, djit, stos, dtos, pkts, bytes, trans, mean, stddev, rate, sintpkt, sintdist, sintpktact, sintdistact, sintpktidl, sintdistidl, dintpkt, dintdist, dintpktact, dintdistact, dintpktidl, dintdistidl, Label(Normal:CC:Background) ,TAPS(Normal:CC:Unknown)\n")
 
-def generateArgusLine(epochStartTime, epochEndTime, proto, sourceAddr, sourcePort, destAddr, destPort, nbPkts, tapsResult):
+def generateArgusLine(epochStartTime, epochEndTime, proto, sourceAddr, sourcePort, destAddr, destPort, nbPkts, realResult, tapsResult):
     #stime	dur	 runtime	 proto	 saddr	 sport	 dir	 daddr	 dport	 state	 sjit	 djit	 stos	 dtos	 pkts	 bytes	 trans	 mean	 stddev	 rate	 sintpkt	 sintdist	 sintpktact	 sintdistact	 sintpktidl	 sintdistidl	 dintpkt	 dintdist	 dintpktact	 dintdistact	 dintpktidl	 dintdistidl	 Label(Normal:CC:Background) 	Bclus(Normal:CC:Unknown)
     stime, duration, runtime, protocol = time.strftime('%Y/%m/%d %H:%M:%S.0', time.localtime(epochStartTime)), epochEndTime-epochStartTime, epochEndTime-epochStartTime, proto
     saddr, sport, direction, daddr, dport, state = sourceAddr, sourcePort, "->", destAddr, destPort, ""
@@ -69,8 +69,9 @@ def generateArgusLine(epochStartTime, epochEndTime, proto, sourceAddr, sourcePor
     pkts, bytess, trans, mean = nbPkts, "", "", epochEndTime-epochStartTime
     stddev, rate, sintpkt, sintdist, sintpktact, sintdistact, sintpktidl, sintdistidl = "", "", "", "", "", "", "", ""
     dintpkt, dintdist, dintpktact, dintdistact, dintpktidl, dintdistidl = "", "", "", "", "", ""
+    realValue = realResult
     tapsValue = tapsResult
-    return f"{stime},{duration},{runtime},{protocol},{saddr},{sport},{direction},{daddr},{dport},{state},{sjit},{djit},{stos},{dtos},{pkts},{bytess},{trans},{mean},{stddev},{rate},{sintpkt},{sintdist},{sintpktact},{sintdistact},{sintpktidl},{sintdistidl},{dintpkt},{dintdist},{dintpktact},{dintdistact},{dintpktidl},{dintdistidl},{tapsValue},{tapsValue}"
+    return f"{stime},{duration},{runtime},{protocol},{saddr},{sport},{direction},{daddr},{dport},{state},{sjit},{djit},{stos},{dtos},{pkts},{bytess},{trans},{mean},{stddev},{rate},{sintpkt},{sintdist},{sintpktact},{sintdistact},{sintpktidl},{sintdistidl},{dintpkt},{dintdist},{dintpktact},{dintdistact},{dintpktidl},{dintdistidl},{realValue},{tapsValue}"
 
 def getNbIpsBySrc(src):
     sum = 0
@@ -190,10 +191,13 @@ for flow in flows:
     # register to argus file
     tapsResult = "Unknown"
     if(src in scan):
-        tapsResult = "From-Botnet"
+        tapsResult = "CC"
     elif(not(src in S)):
         tapsResult = "Normal"
-    argusFile.write(generateArgusLine(flow["startTime"], flow["endTime"], proto, src, srcPort, dst, dstPort, 1, tapsResult)+"\n")
+    realResult = "Normal"
+    if(src in realAttackers):
+        realResult = "CC"
+    argusFile.write(generateArgusLine(flow["startTime"], flow["endTime"], proto, src, srcPort, dst, dstPort, 1, realResult, tapsResult)+"\n")
 
     if(totalFlowNb == flowCount):
         print("final part B")
