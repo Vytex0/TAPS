@@ -63,7 +63,7 @@ argusFile.write("#stime,dur, runtime, proto, saddr, sport, dir, daddr, dport, st
 
 def generateArgusLine(epochStartTime, epochEndTime, proto, sourceAddr, sourcePort, destAddr, destPort, nbPkts, realResult, tapsResult):
     #stime	dur	 runtime	 proto	 saddr	 sport	 dir	 daddr	 dport	 state	 sjit	 djit	 stos	 dtos	 pkts	 bytes	 trans	 mean	 stddev	 rate	 sintpkt	 sintdist	 sintpktact	 sintdistact	 sintpktidl	 sintdistidl	 dintpkt	 dintdist	 dintpktact	 dintdistact	 dintpktidl	 dintdistidl	 Label(Normal:CC:Background) 	Bclus(Normal:CC:Unknown)
-    stime, duration, runtime, protocol = time.strftime('%Y/%m/%d %H:%M:%S.0', time.localtime(epochStartTime)), epochEndTime-epochStartTime, epochEndTime-epochStartTime, proto
+    stime, duration, runtime, protocol = str(time.strftime('%Y/%m/%d %H:%M:%S', time.localtime(epochStartTime)))+".000000", epochEndTime-epochStartTime, epochEndTime-epochStartTime, proto
     saddr, sport, direction, daddr, dport, state = sourceAddr, sourcePort, "->", destAddr, destPort, ""
     sjit, djit, stos, dtos  = "", "", "", ""
     pkts, bytess, trans, mean = nbPkts, "", "", epochEndTime-epochStartTime
