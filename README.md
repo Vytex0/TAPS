@@ -6,6 +6,8 @@ Le projet est décomposé en quatre fichiers :
 - [taps_getRealAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_getRealAttackers.py)  
 - [taps_calculateAttackers.py](https://github.com/Vytex0/TAPS/blob/main/taps_calculateAttackers.py)  
 - [taps_getStats.py](https://github.com/Vytex0/TAPS/blob/main/taps_getStats.py)  
+- [taps_allCalculate.py](https://github.com/Vytex0/TAPS/blob/main/taps_allCalculate.py)
+- [taps_analyseResults.py](https://github.com/Vytex0/TAPS/blob/main/taps_analyseResults.py)
   
   
 ## taps_getFlows.py  
@@ -62,6 +64,33 @@ Le projet est décomposé en quatre fichiers :
   
 **Description :** Ce script récupère la liste des flux et la liste des attaquants et renvoie des statistiques sur ces deux fichiers.
 
+
+  
+## taps_allCalculate.py
+**Utilisation :** `./taps_allCalculate.py`
+  
+**Type :** Ce script est un **script annexe**. 
+  
+**Variables à configurer :** 
+
+- botnets : botnets à analyser
+- kValues : paramètre de TAPS
+- timeBins : temps maximum entre deux paquets d'un même flux
+- timers : paramètre de TAPS (timer)
+  
+**Description :** Ce script fait varier les paramètres k, t et tb et recalcule la sortie de l'algorithme TAPS afin d'analyser l'influence des paramètres par la suite.
+
+
+
+  
+## taps_analyseResults.py
+**Utilisation :** `./taps_analyseResults.py <result files directory>`
+  
+**Type :** Ce script est un **script annexe**. 
+  
+**Variables à configurer :** Aucune
+  
+**Description :** Ce script récupère les différentes sorties de TAPS selon les différents paramètres afin de trier les versions les plus performantes. (s'appelle après taps_allCalculate.py)
 
 
 
